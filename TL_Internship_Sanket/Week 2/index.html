@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Internship Documentation — Week 2 | Digital Fabrication</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+/* ===================== VARIABLES ===================== */
+:root {
+  --ink: #0d0f14;
+  --ink2: #181c24;
+  --ink3: #222733;
+  --surface: #1a1f2e;
+  --glass: rgba(255,255,255,0.04);
+  --glass2: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --cyan: #00e5ff;
+  --cyan-dim: rgba(0,229,255,0.12);
+  --amber: #ffab40;
+  --amber-dim: rgba(255,171,64,0.12);
+  --violet: #b388ff;
+  --violet-dim: rgba(179,136,255,0.12);
+  --green: #69ff97;
+  --green-dim: rgba(105,255,151,0.12);
+  --text: #e8eaf0;
+  --text2: #9aa0b4;
+  --text3: #5c6278;
+  --r: 12px;
+  --r2: 20px;
+  --shadow: 0 8px 40px rgba(0,0,0,0.5);
+  --shadow2: 0 2px 12px rgba(0,0,0,0.3);
+  --mono: 'JetBrains Mono', monospace;
+  --display: 'Syne', sans-serif;
+  --body: 'DM Sans', sans-serif;
+}
+
+/* ===================== RESET ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ===================== NOISE OVERLAY ===================== */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: 0.4;
+}
+
+/* ===================== NAV ===================== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: rgba(13,15,20,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+  padding: 0 2rem;
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  font-family: var(--display);
+  font-weight: 800; font-size: 1.1rem;
+  color: var(--cyan);
+  letter-spacing: -0.02em;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.nav-logo span { color: var(--text2); font-weight: 400; font-size: 0.85rem; }
+.nav-links { display: flex; gap: 0.25rem; }
+.nav-links a {
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+.nav-links a:hover { color: var(--cyan); background: var(--cyan-dim); }
+.nav-menu-btn { display: none; background: none; border: none; color: var(--text2); font-size: 1.2rem; cursor: pointer; }
+
+/* ===================== HERO ===================== */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center;
+  padding: 120px 2rem 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(0,229,255,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 60%, rgba(179,136,255,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(255,171,64,0.04) 0%, transparent 50%);
+}
+.hero-grid {
+  position: absolute; inset: 0; z-index: -1;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+.hero-label {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: var(--cyan-dim); border: 1px solid rgba(0,229,255,0.2);
+  color: var(--cyan); border-radius: 100px;
+  padding: 0.35rem 1rem; font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.6s ease both;
+}
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+  animation: fadeInUp 0.6s 0.1s ease both;
+}
+.hero h1 em { font-style: normal; color: var(--cyan); }
+.hero-sub {
+  color: var(--text2); font-size: 1.05rem; max-width: 560px;
+  animation: fadeInUp 0.6s 0.2s ease both;
+  margin-bottom: 2.5rem;
+}
+.hero-tags {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem;
+  animation: fadeInUp 0.6s 0.3s ease both;
+  margin-bottom: 3rem;
+}
+.tag {
+  padding: 0.3rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.04em; font-family: var(--mono);
+}
+.tag-cyan { background: var(--cyan-dim); color: var(--cyan); border: 1px solid rgba(0,229,255,0.2); }
+.tag-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(255,171,64,0.2); }
+.tag-violet { background: var(--violet-dim); color: var(--violet); border: 1px solid rgba(179,136,255,0.2); }
+.tag-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(105,255,151,0.2); }
+.hero-meta {
+  display: flex; gap: 2.5rem; justify-content: center;
+  animation: fadeInUp 0.6s 0.4s ease both;
+}
+.hero-meta-item { text-align: center; }
+.hero-meta-item .val {
+  font-family: var(--display); font-size: 2rem; font-weight: 800;
+  color: var(--cyan); line-height: 1;
+}
+.hero-meta-item .lbl { font-size: 0.75rem; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.25rem; }
+
+/* ===================== SCROLL CTA ===================== */
+.scroll-cue {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  color: var(--text3); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  animation: fadeIn 1s 1s ease both;
+}
+.scroll-dot {
+  width: 20px; height: 30px;
+  border: 1.5px solid var(--text3); border-radius: 10px;
+  position: relative; display: flex; justify-content: center;
+}
+.scroll-dot::after {
+  content: '';
+  width: 3px; height: 6px; background: var(--cyan); border-radius: 2px;
+  position: absolute; top: 5px;
+  animation: scrollBounce 1.6s infinite;
+}
+
+/* ===================== WEEK STRIP ===================== */
+.week-strip {
+  background: var(--ink2);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 1.2rem 2rem;
+  overflow-x: auto;
+}
+.week-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; gap: 1rem; align-items: center; justify-content: center;
+  min-width: max-content;
+}
+.day-chip {
+  display: flex; align-items: center; gap: 0.6rem;
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 10px; padding: 0.5rem 1rem;
+  text-decoration: none; color: var(--text2);
+  font-size: 0.82rem; font-weight: 500;
+  transition: all 0.2s; white-space: nowrap;
+}
+.day-chip:hover { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-dim); }
+.day-chip .num {
+  font-family: var(--mono); font-size: 0.75rem; color: var(--text3);
+  background: var(--ink3); padding: 0.1rem 0.4rem; border-radius: 4px;
+}
+.day-chip.c { border-color: rgba(0,229,255,0.3); color: var(--cyan); }
+.day-chip.a { border-color: rgba(255,171,64,0.3); color: var(--amber); }
+.day-chip.v { border-color: rgba(179,136,255,0.3); color: var(--violet); }
+
+/* ===================== SECTION LAYOUT ===================== */
+.section { padding: 80px 2rem; position: relative; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+
+/* Day headers */
+.day-header {
+  display: flex; align-items: flex-start; gap: 1.5rem;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+.day-number-block {
+  flex-shrink: 0;
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 1rem 1.2rem;
+  text-align: center;
+  min-width: 80px;
+}
+.day-number-block .day-n {
+  font-family: var(--display); font-size: 2.2rem; font-weight: 800; line-height: 1;
+}
+.day-number-block .day-name { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-top: 0.2rem; }
+.day-title-area h2 {
+  font-family: var(--display); font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.2; margin-bottom: 0.4rem;
+}
+.day-title-area p { color: var(--text2); font-size: 0.95rem; }
+.day-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; }
+
+/* Section stripe backgrounds */
+.s-cyan { background: linear-gradient(180deg, var(--ink) 0%, rgba(0,229,255,0.02) 50%, var(--ink) 100%); }
+.s-amber { background: linear-gradient(180deg, var(--ink) 0%, rgba(255,171,64,0.02) 50%, var(--ink) 100%); }
+.s-violet { background: linear-gradient(180deg, var(--ink) 0%, rgba(179,136,255,0.02) 50%, var(--ink) 100%); }
+
+/* ===================== TOPIC HEADERS ===================== */
+.topic-header {
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1.25rem; margin-top: 3rem;
+}
+.topic-header:first-of-type { margin-top: 0; }
+.topic-num {
+  font-family: var(--mono); font-size: 0.7rem; color: var(--text3);
+  background: var(--ink3); border: 1px solid var(--border);
+  padding: 0.15rem 0.5rem; border-radius: 4px;
+  min-width: 36px; text-align: center;
+}
+.topic-header h3 {
+  font-family: var(--display); font-size: 1.4rem;
+  font-weight: 700; letter-spacing: -0.01em;
+}
+.topic-line { flex: 1; height: 1px; background: var(--border); }
+
+/* ===================== CARDS ===================== */
+.card {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 1.5rem;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: var(--shadow); }
+.card-grid { display: grid; gap: 1.25rem; }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.grid-4 { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.card-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+.card h4 {
+  font-family: var(--display); font-weight: 700; font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.card p, .card li { color: var(--text2); font-size: 0.9rem; line-height: 1.6; }
+.card ul { padding-left: 1.2rem; }
+.card ul li { margin-bottom: 0.25rem; }
+.card-accent-cyan { border-color: rgba(0,229,255,0.2); }
+.card-accent-cyan .card-icon { color: var(--cyan); }
+.card-accent-amber { border-color: rgba(255,171,64,0.2); }
+.card-accent-amber .card-icon { color: var(--amber); }
+.card-accent-violet { border-color: rgba(179,136,255,0.2); }
+.card-accent-violet .card-icon { color: var(--violet); }
+.card-accent-green { border-color: rgba(105,255,151,0.2); }
+.card-accent-green .card-icon { color: var(--green); }
+
+/* ===================== MATERIAL CARDS ===================== */
+.material-card {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 1.75rem;
+  transition: all 0.25s;
+  position: relative; overflow: hidden;
+}
+.material-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.mat-pla::before { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+.mat-abs::before { background: linear-gradient(90deg, var(--amber), #ff6d00); }
+.mat-petg::before { background: linear-gradient(90deg, var(--violet), var(--cyan)); }
+.material-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--border2); }
+.mat-label {
+  font-family: var(--mono); font-size: 2rem; font-weight: 500;
+  letter-spacing: -0.02em; margin-bottom: 0.2rem;
+}
+.mat-pla .mat-label { color: var(--green); }
+.mat-abs .mat-label { color: var(--amber); }
+.mat-petg .mat-label { color: var(--violet); }
+.mat-full { font-size: 0.8rem; color: var(--text3); margin-bottom: 1rem; font-style: italic; }
+.mat-row { display: flex; gap: 0.4rem; align-items: flex-start; margin-bottom: 0.5rem; font-size: 0.87rem; }
+.mat-row .k { color: var(--text3); min-width: 100px; font-size: 0.8rem; }
+.mat-row .v { color: var(--text); flex: 1; }
+.temp-badge {
+  display: inline-block;
+  background: var(--ink3); border: 1px solid var(--border);
+  border-radius: 6px; padding: 0.15rem 0.6rem;
+  font-family: var(--mono); font-size: 0.8rem; color: var(--cyan);
+}
+
+/* ===================== FDM FLOW DIAGRAM ===================== */
+.fdm-diagram {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 2rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  position: relative;
+}
+.fdm-diagram h4 {
+  font-family: var(--display); font-weight: 700; font-size: 1rem;
+  color: var(--cyan); text-align: center; margin-bottom: 1.5rem;
+  letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.8rem;
+}
+.fdm-step {
+  display: flex; align-items: center; gap: 1rem;
+  background: var(--ink2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 0.85rem 1.5rem;
+  width: 100%; max-width: 380px;
+  transition: all 0.2s; cursor: default;
+  position: relative;
+}
+.fdm-step:hover { border-color: var(--cyan); background: var(--cyan-dim); }
+.fdm-step .step-icon { font-size: 1.2rem; width: 2rem; text-align: center; flex-shrink: 0; }
+.fdm-step .step-info { flex: 1; }
+.fdm-step .step-info .s-name { font-weight: 600; font-size: 0.9rem; }
+.fdm-step .step-info .s-desc { font-size: 0.78rem; color: var(--text2); }
+.fdm-arrow {
+  display: flex; align-items: center; justify-content: center;
+  height: 28px; color: var(--cyan); font-size: 0.8rem;
+  position: relative;
+}
+.fdm-arrow::before {
+  content: '';
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 1px; height: 100%;
+  background: linear-gradient(to bottom, var(--cyan), transparent);
+}
+
+/* ===================== SPEC TABLE ===================== */
+.spec-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.spec-table tr { transition: background 0.15s; }
+.spec-table tr:hover td { background: var(--glass2); }
+.spec-table td {
+  padding: 0.75rem 1rem; font-size: 0.88rem;
+  border-bottom: 1px solid var(--border);
+}
+.spec-table td:first-child {
+  color: var(--text3); font-size: 0.8rem; letter-spacing: 0.03em;
+  width: 45%; font-family: var(--mono);
+  border-right: 1px solid var(--border);
+}
+.spec-table td:last-child { color: var(--text); }
+.spec-table tr:last-child td { border-bottom: none; }
+.spec-wrap {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); overflow: hidden;
+}
+.spec-header {
+  background: var(--ink3); border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.78rem; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase;
+  font-family: var(--mono);
+}
+
+/* ===================== IMAGE PLACEHOLDER ===================== */
+.img-placeholder {
+  background: var(--glass);
+  border: 2px dashed var(--border2);
+  border-radius: var(--r2);
+  min-height: 220px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; gap: 0.75rem;
+  padding: 2rem;
+  transition: all 0.2s;
+  cursor: pointer; position: relative; overflow: hidden;
+}
+.img-placeholder:hover { border-color: var(--cyan); background: var(--cyan-dim); }
+.img-placeholder .ph-icon { font-size: 2.5rem; color: var(--text3); transition: color 0.2s; }
+.img-placeholder:hover .ph-icon { color: var(--cyan); }
+.img-placeholder .ph-label { font-family: var(--mono); font-size: 0.75rem; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; }
+.img-placeholder .ph-sub { font-size: 0.82rem; color: var(--text3); max-width: 260px; }
+.img-placeholder input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%;
+}
+.img-placeholder img { max-width: 100%; max-height: 400px; border-radius: 8px; display: none; }
+.img-caption {
+  margin-top: 0.75rem;
+  background: var(--glass); border: 1px solid var(--border); border-radius: 10px;
+  padding: 0.75rem 1rem; font-size: 0.85rem; color: var(--text2);
+  display: flex; gap: 0.5rem; align-items: flex-start;
+}
+.img-caption i { color: var(--cyan); flex-shrink: 0; margin-top: 0.1rem; }
+
+/* ===================== WORKFLOW ===================== */
+.workflow {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 0; justify-content: center;
+}
+.wf-step {
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 0.9rem 1.1rem;
+  min-width: 110px; text-align: center;
+  transition: all 0.2s;
+}
+.wf-step:hover { border-color: var(--violet); background: var(--violet-dim); }
+.wf-step .wf-icon { font-size: 1.3rem; margin-bottom: 0.1rem; }
+.wf-step .wf-name { font-size: 0.78rem; font-weight: 600; line-height: 1.3; }
+.wf-step .wf-desc { font-size: 0.7rem; color: var(--text3); }
+.wf-arrow { color: var(--text3); font-size: 0.9rem; padding: 0 0.25rem; }
+
+/* ===================== SAFETY CARDS ===================== */
+.safety-card {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 1.25rem;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.5rem;
+  transition: all 0.2s;
+}
+.safety-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.safety-card .s-ico { font-size: 1.8rem; }
+.safety-card h4 { font-weight: 700; font-size: 0.9rem; }
+.safety-card p { font-size: 0.8rem; color: var(--text2); }
+
+/* ===================== TEMP DISPLAY ===================== */
+.temp-display {
+  display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 1rem;
+}
+.temp-card {
+  flex: 1; min-width: 180px;
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 1.25rem;
+  text-align: center;
+}
+.temp-card .t-val {
+  font-family: var(--display); font-size: 2.2rem; font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+.temp-card .t-val.recommended { color: var(--cyan); }
+.temp-card .t-val.best { color: var(--green); }
+.temp-card .t-label { font-size: 0.78rem; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* ===================== NOTE CARD ===================== */
+.note-card {
+  background: var(--amber-dim);
+  border: 1px solid rgba(255,171,64,0.25);
+  border-left: 3px solid var(--amber);
+  border-radius: var(--r2); padding: 1.25rem 1.5rem;
+  display: flex; gap: 0.75rem; align-items: flex-start;
+}
+.note-card i { color: var(--amber); margin-top: 0.2rem; flex-shrink: 0; }
+.note-card p { color: var(--text2); font-size: 0.88rem; }
+
+/* ===================== VINYL SPEC CARDS ===================== */
+.vinyl-spec {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); overflow: hidden;
+  transition: all 0.2s;
+}
+.vinyl-spec:hover { border-color: var(--border2); transform: translateY(-2px); }
+.vinyl-spec-header {
+  padding: 1rem 1.25rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.vs-model {
+  font-family: var(--display); font-size: 1.4rem; font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.vinyl-spec-body { padding: 0 1.25rem 1.25rem; }
+.vs-feature { display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 0.87rem; }
+.vs-feature i { color: var(--green); font-size: 0.75rem; margin-top: 0.3rem; flex-shrink: 0; }
+
+/* ===================== LEARNING OUTCOMES ===================== */
+.outcomes-section {
+  background: var(--ink2);
+  border-top: 1px solid var(--border);
+  padding: 80px 2rem;
+  position: relative; overflow: hidden;
+}
+.outcomes-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 50% 80% at 10% 50%, rgba(0,229,255,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 90% 50%, rgba(105,255,151,0.04) 0%, transparent 60%);
+}
+.outcomes-inner { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+.outcomes-inner .oc-label {
+  font-family: var(--mono); font-size: 0.72rem; color: var(--cyan);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem;
+}
+.outcomes-inner h2 {
+  font-family: var(--display); font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1.5rem;
+}
+.outcomes-inner .oc-quote {
+  font-size: 1.05rem; line-height: 1.8; color: var(--text2);
+  border-left: 3px solid var(--cyan); padding-left: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+.outcomes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.oc-pill {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 1rem;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 0.4rem;
+  transition: all 0.2s;
+}
+.oc-pill:hover { border-color: var(--cyan); background: var(--cyan-dim); }
+.oc-pill i { font-size: 1.3rem; color: var(--cyan); }
+.oc-pill span { font-size: 0.82rem; font-weight: 600; }
+
+/* ===================== PROGRESS BAR ===================== */
+.progress-section { padding: 2rem 0 0; }
+.progress-item { margin-bottom: 1rem; }
+.progress-header { display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.82rem; }
+.progress-header .p-label { color: var(--text2); font-weight: 500; }
+.progress-header .p-val { font-family: var(--mono); color: var(--cyan); }
+.progress-bar { height: 6px; background: var(--ink3); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; transform: scaleX(0); transform-origin: left; transition: transform 1s cubic-bezier(0.4,0,0.2,1); }
+.pf-cyan { background: linear-gradient(90deg, var(--cyan), rgba(0,229,255,0.4)); }
+.pf-amber { background: linear-gradient(90deg, var(--amber), rgba(255,171,64,0.4)); }
+.pf-violet { background: linear-gradient(90deg, var(--violet), rgba(179,136,255,0.4)); }
+.pf-green { background: linear-gradient(90deg, var(--green), rgba(105,255,151,0.4)); }
+.progress-fill.animated { transform: scaleX(1); }
+
+/* ===================== ACRYLIC TECHNICAL NOTE CARD ===================== */
+.acrylic-note-card {
+  background: linear-gradient(135deg, rgba(255,171,64,0.06) 0%, rgba(0,229,255,0.04) 100%);
+  border: 1px solid rgba(255,171,64,0.25);
+  border-left: 3px solid var(--amber);
+  border-radius: var(--r2);
+  overflow: hidden;
+  margin-top: 0;
+}
+.anc-header {
+  display: flex; align-items: center; gap: 0.9rem;
+  padding: 1.1rem 1.4rem;
+  background: rgba(255,171,64,0.07);
+  border-bottom: 1px solid rgba(255,171,64,0.15);
+  flex-wrap: wrap;
+}
+.anc-icon-wrap {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: rgba(255,171,64,0.15); border: 1px solid rgba(255,171,64,0.3);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--amber); font-size: 1rem; flex-shrink: 0;
+}
+.anc-title { font-family: var(--display); font-weight: 700; font-size: 1rem; }
+.anc-sub { font-size: 0.75rem; color: var(--text3); font-family: var(--mono); margin-top: 0.1rem; }
+.anc-badge {
+  margin-left: auto;
+  background: rgba(105,255,151,0.1); border: 1px solid rgba(105,255,151,0.25);
+  color: var(--green); border-radius: 100px;
+  padding: 0.2rem 0.7rem; font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.04em; display: flex; align-items: center; gap: 0.3rem;
+  white-space: nowrap;
+}
+.anc-body { padding: 1.25rem 1.4rem; display: flex; flex-direction: column; gap: 1.25rem; }
+.anc-param-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+@media (max-width:600px) { .anc-param-grid { grid-template-columns: repeat(2,1fr); } }
+.anc-param {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 0.8rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  text-align: center; transition: all 0.2s;
+}
+.anc-param:hover { transform: translateY(-2px); border-color: var(--border2); }
+.anc-p-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+}
+.anc-p-label { font-size: 0.7rem; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; }
+.anc-p-val { font-family: var(--mono); font-size: 0.88rem; font-weight: 500; color: var(--text); }
+.anc-table-wrap {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r); overflow: hidden;
+}
+.anc-table-title {
+  padding: 0.6rem 0.9rem; font-size: 0.75rem; color: var(--text3);
+  letter-spacing: 0.06em; text-transform: uppercase; font-family: var(--mono);
+  border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.4rem;
+}
+.anc-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.anc-table thead th {
+  padding: 0.55rem 0.75rem; text-align: left;
+  color: var(--text3); font-weight: 500; font-size: 0.75rem;
+  letter-spacing: 0.04em; border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+.anc-table tbody td {
+  padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border);
+  color: var(--text2); vertical-align: middle;
+}
+.anc-table tbody tr:last-child td { border-bottom: none; }
+.anc-table tbody tr:not(:last-child):hover td { background: var(--glass2); }
+.anc-tr-best td { background: rgba(0,229,255,0.03); }
+.anc-pill {
+  display: inline-block; padding: 0.15rem 0.55rem; border-radius: 5px;
+  font-family: var(--mono); font-size: 0.75rem; font-weight: 500;
+}
+.anc-pill.cyan { background: var(--cyan-dim); color: var(--cyan); }
+.anc-pill.amber { background: var(--amber-dim); color: var(--amber); }
+.anc-pill.violet { background: var(--violet-dim); color: var(--violet); }
+.anc-dot {
+  display: inline-block; width: 7px; height: 7px;
+  border-radius: 50%; margin-right: 4px;
+}
+.anc-dot.green { background: var(--green); box-shadow: 0 0 4px var(--green); }
+.anc-tips { display: flex; flex-direction: column; gap: 0.55rem; }
+.anc-tip {
+  display: flex; align-items: flex-start; gap: 0.6rem;
+  font-size: 0.85rem; color: var(--text2);
+}
+.anc-tip-icon { flex-shrink: 0; margin-top: 0.15rem; font-size: 0.85rem; }
+
+/* ===================== VINYL WORKFLOW (animated) ===================== */
+.vinyl-workflow {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0; padding: 1.5rem;
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); overflow: hidden; position: relative;
+}
+.vinyl-workflow::before {
+  content: '';
+  position: absolute; left: 50%; top: 2rem; bottom: 2rem;
+  width: 1px; transform: translateX(-50%);
+  background: linear-gradient(to bottom, var(--violet), rgba(179,136,255,0.1));
+  z-index: 0;
+}
+.vwf-row {
+  display: flex; align-items: center; gap: 1rem; width: 100%; max-width: 560px;
+  z-index: 1;
+}
+.vwf-row:nth-child(odd) { flex-direction: row; }
+.vwf-row:nth-child(even) { flex-direction: row-reverse; }
+.vwf-step {
+  flex: 1;
+  background: var(--ink2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 0.9rem 1.1rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  transition: all 0.25s; cursor: default;
+  animation: vwfFadeIn 0.5s ease both;
+}
+.vwf-step:hover { border-color: var(--violet); background: var(--violet-dim); transform: translateX(4px); }
+.vwf-row:nth-child(even) .vwf-step:hover { transform: translateX(-4px); }
+.vwf-icon-wrap {
+  width: 36px; height: 36px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.95rem; flex-shrink: 0;
+}
+.vwf-info .vwf-name { font-weight: 600; font-size: 0.88rem; }
+.vwf-info .vwf-desc { font-size: 0.75rem; color: var(--text3); }
+.vwf-connector {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0; padding: 0.3rem 0; z-index: 1;
+}
+.vwf-node {
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 2px solid var(--violet);
+  background: var(--ink); flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(179,136,255,0.5);
+}
+.vwf-line {
+  width: 2px; height: 28px;
+  background: linear-gradient(to bottom, var(--violet), rgba(179,136,255,0.3));
+}
+@keyframes vwfFadeIn { from { opacity:0; transform: translateX(-16px); } to { opacity:1; transform:none; } }
+
+/* ===================== VINYL APP CARDS ===================== */
+.vinyl-app-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.vinyl-app-card {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 1.3rem;
+  position: relative; overflow: hidden;
+  transition: all 0.25s; cursor: default;
+}
+.vinyl-app-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--violet), var(--cyan));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.vinyl-app-card:hover::before { transform: scaleX(1); }
+.vinyl-app-card:hover { border-color: rgba(179,136,255,0.3); transform: translateY(-3px); box-shadow: var(--shadow); }
+.vac-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; margin-bottom: 0.75rem;
+  background: var(--violet-dim); color: var(--violet);
+  border: 1px solid rgba(179,136,255,0.2);
+}
+.vinyl-app-card h4 { font-family: var(--display); font-weight: 700; font-size: 0.95rem; margin-bottom: 0.4rem; }
+.vinyl-app-card p { font-size: 0.82rem; color: var(--text2); line-height: 1.5; }
+.vac-tag {
+  display: inline-block; margin-top: 0.6rem;
+  font-family: var(--mono); font-size: 0.68rem;
+  background: var(--violet-dim); color: var(--violet);
+  border: 1px solid rgba(179,136,255,0.2);
+  padding: 0.15rem 0.5rem; border-radius: 4px;
+}
+
+/* ===================== ENHANCED VINYL SPEC ===================== */
+.vinyl-spec-v2 {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); overflow: hidden; transition: all 0.25s;
+}
+.vinyl-spec-v2:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: var(--shadow); }
+.vsv2-hero {
+  padding: 1.4rem;
+  position: relative; overflow: hidden;
+}
+.vsv2-hero::after {
+  content: attr(data-model);
+  position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+  font-family: var(--display); font-size: 4.5rem; font-weight: 800;
+  opacity: 0.04; color: white; pointer-events: none; line-height: 1;
+  letter-spacing: -0.05em;
+}
+.vsv2-model-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+.vsv2-model { font-family: var(--display); font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; }
+.vsv2-subtitle { font-size: 0.78rem; color: var(--text3); font-family: var(--mono); }
+.vsv2-quick { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.vsv2-q {
+  background: var(--ink3); border: 1px solid var(--border);
+  border-radius: 8px; padding: 0.5rem 0.75rem;
+  text-align: center; min-width: 80px;
+}
+.vsv2-q .vq-val { font-family: var(--mono); font-size: 0.88rem; color: var(--text); font-weight: 500; }
+.vsv2-q .vq-lbl { font-size: 0.65rem; color: var(--text3); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 0.1rem; }
+.vsv2-divider { height: 1px; background: var(--border); }
+.vsv2-body { padding: 1.2rem 1.4rem; display: flex; flex-direction: column; gap: 1rem; }
+.vsv2-section-title {
+  font-size: 0.7rem; color: var(--text3); letter-spacing: 0.1em;
+  text-transform: uppercase; font-family: var(--mono);
+  display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;
+}
+.vsv2-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+.vsv2-feat { display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.45rem; font-size: 0.85rem; color: var(--text2); }
+.vsv2-feat i { font-size: 0.7rem; margin-top: 0.3rem; flex-shrink: 0; }
+.vsv2-app-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.vsv2-app-pill {
+  font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 100px;
+  font-weight: 500; letter-spacing: 0.02em;
+}
+
+/* ===================== FOOTER ===================== */
+footer {
+  background: var(--ink); border-top: 1px solid var(--border);
+  padding: 2rem; text-align: center;
+  color: var(--text3); font-size: 0.82rem;
+}
+footer span { color: var(--text2); }
+
+/* ===================== DIVIDERS ===================== */
+.section-divider {
+  height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 0 2rem;
+}
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  80% { transform: translateY(10px); opacity: 0.2; }
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ===================== CHIP / BADGE ===================== */
+.badge {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
+  padding: 0.2rem 0.6rem; border-radius: 5px;
+  border: 1px solid;
+}
+.badge-cyan { background: var(--cyan-dim); color: var(--cyan); border-color: rgba(0,229,255,0.25); }
+.badge-amber { background: var(--amber-dim); color: var(--amber); border-color: rgba(255,171,64,0.25); }
+.badge-violet { background: var(--violet-dim); color: var(--violet); border-color: rgba(179,136,255,0.25); }
+.badge-green { background: var(--green-dim); color: var(--green); border-color: rgba(105,255,151,0.25); }
+
+/* ===================== HIGHLIGHT BOX ===================== */
+.highlight-box {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: var(--r2); padding: 1.5rem; margin-bottom: 1.25rem;
+}
+.highlight-box h4 {
+  font-family: var(--display); font-weight: 700; font-size: 1rem;
+  margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.highlight-box p, .highlight-box li { color: var(--text2); font-size: 0.9rem; }
+.highlight-box ul { padding-left: 1.25rem; }
+.highlight-box ul li { margin-bottom: 0.25rem; }
+
+/* ===================== TWO-COL ===================== */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+@media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ===================== MOBILE NAV ===================== */
+@media (max-width: 820px) {
+  .nav-links { display: none; }
+  .nav-menu-btn { display: block; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 64px; left: 0; right: 0;
+    background: rgba(13,15,20,0.98);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem;
+  }
+  .hero-meta { gap: 1.5rem; }
+  .day-header { flex-direction: column; }
+  .workflow { flex-direction: column; }
+  .wf-arrow { transform: rotate(90deg); }
+  .fdm-diagram { padding: 1.25rem; }
+}
+@media (max-width: 480px) {
+  .section { padding: 60px 1rem; }
+  nav { padding: 0 1rem; }
+  .temp-display { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <i class="fas fa-microchip"></i>
+      Internship Docs <span>Week 02</span>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#day1"><i class="fas fa-cube" style="margin-right:4px;font-size:.75rem;color:var(--cyan)"></i>3D Printing</a>
+      <a href="#day2"><i class="fas fa-bolt" style="margin-right:4px;font-size:.75rem;color:var(--amber)"></i>Laser Cutting</a>
+      <a href="#day3"><i class="fas fa-cut" style="margin-right:4px;font-size:.75rem;color:var(--violet)"></i>Vinyl Cutting</a>
+      <a href="#outcomes"><i class="fas fa-graduation-cap" style="margin-right:4px;font-size:.75rem;color:var(--green)"></i>Outcomes</a>
+    </div>
+    <button class="nav-menu-btn" onclick="toggleNav()" aria-label="Menu"><i class="fas fa-bars"></i></button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-label"><i class="fas fa-flask"></i> Tinkerers Lab Internship</div>
+  <h1>Week <em>02</em> —<br>Digital Fabrication</h1>
+  <p class="hero-sub">Hands-on exploration of 3D Printing, Laser Cutting & Vinyl Cutting technologies during the second week of industrial training.</p>
+
+  <div class="hero-tags">
+    <span class="tag tag-cyan"><i class="fas fa-cube"></i> &nbsp;3D Printing</span>
+    <span class="tag tag-amber"><i class="fas fa-bolt"></i> &nbsp;Laser Cutting</span>
+    <span class="tag tag-violet"><i class="fas fa-cut"></i> &nbsp;Vinyl Cutting</span>
+    <span class="tag tag-green"><i class="fas fa-cogs"></i> &nbsp;FDM / FFF</span>
+    <span class="tag tag-cyan"><i class="fas fa-thermometer-half"></i> &nbsp;CO₂ Laser</span>
+    <span class="tag tag-amber"><i class="fas fa-layer-group"></i> &nbsp;Additive Mfg</span>
+  </div>
+
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <div class="val">3</div>
+      <div class="lbl">Days</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val" style="color:var(--amber)">6+</div>
+      <div class="lbl">Machines</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val" style="color:var(--violet)">12+</div>
+      <div class="lbl">Topics</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val" style="color:var(--green)">∞</div>
+      <div class="lbl">Learning</div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <div class="scroll-dot"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- WEEK STRIP -->
+<div class="week-strip">
+  <div class="week-inner">
+    <a class="day-chip c" href="#day1"><span class="num">01</span> <i class="fas fa-cube"></i> 3D Printing & Scanning</a>
+    <a class="day-chip a" href="#day2"><span class="num">02</span> <i class="fas fa-bolt"></i> Laser Cutting</a>
+    <a class="day-chip v" href="#day3"><span class="num">03</span> <i class="fas fa-cut"></i> Vinyl Cutting</a>
+    <a class="day-chip" href="#outcomes"><span class="num">★</span> <i class="fas fa-graduation-cap"></i> Learning Outcomes</a>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 01 – 3D PRINTING & SCANNING                              -->
+<!-- ============================================================ -->
+<section class="section s-cyan" id="day1">
+  <div class="section-inner">
+
+    <!-- Day Header -->
+    <div class="day-header">
+      <div class="day-number-block" style="border-color:rgba(0,229,255,0.25)">
+        <div class="day-n" style="color:var(--cyan)">01</div>
+        <div class="day-name">Monday</div>
+      </div>
+      <div class="day-title-area">
+        <h2>3D Printing &amp; <span style="color:var(--cyan)">3D Scanning</span></h2>
+        <p>Additive manufacturing fundamentals, FDM technology, material science, and hands-on machine operation.</p>
+        <div class="day-badges">
+          <span class="badge badge-cyan"><i class="fas fa-cube"></i> FDM</span>
+          <span class="badge badge-green"><i class="fas fa-layer-group"></i> Additive Mfg</span>
+          <span class="badge badge-cyan"><i class="fas fa-ruler-combined"></i> 3D Scanning</span>
+          <span class="badge badge-green"><i class="fas fa-flask"></i> PLA / ABS / PETG</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. INTRO 3D PRINTING -->
+    <div class="topic-header reveal">
+      <span class="topic-num">01</span>
+      <h3>Introduction to 3D Printing</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="card-grid grid-2 reveal reveal-delay-1" style="margin-bottom:1.25rem">
+      <div class="card card-accent-cyan">
+        <div class="card-icon"><i class="fas fa-info-circle"></i></div>
+        <h4>Definition</h4>
+        <p>3D printing, also known as <strong>Additive Manufacturing</strong>, is a process of creating three-dimensional physical objects from a digital CAD model by depositing material layer by layer until the complete object is formed.</p>
+      </div>
+      <div class="card card-accent-green">
+        <div class="card-icon"><i class="fas fa-star"></i></div>
+        <h4>Importance &amp; Benefits</h4>
+        <ul>
+          <li>Rapid prototyping with minimal lead time</li>
+          <li>Highly customizable and complex geometries</li>
+          <li>Reduced material waste compared to subtractive methods</li>
+          <li>Low-cost short-run production</li>
+          <li>Design freedom without tooling constraints</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight-box reveal">
+      <h4><i class="fas fa-industry" style="color:var(--cyan)"></i> Industrial Applications</h4>
+      <div class="card-grid grid-4" style="margin-top:0.75rem">
+        <div style="text-align:center;padding:0.5rem"><div style="font-size:1.5rem;color:var(--cyan)"><i class="fas fa-heartbeat"></i></div><div style="font-size:0.8rem;margin-top:0.3rem">Healthcare &amp; Prosthetics</div></div>
+        <div style="text-align:center;padding:0.5rem"><div style="font-size:1.5rem;color:var(--cyan)"><i class="fas fa-plane"></i></div><div style="font-size:0.8rem;margin-top:0.3rem">Aerospace Components</div></div>
+        <div style="text-align:center;padding:0.5rem"><div style="font-size:1.5rem;color:var(--cyan)"><i class="fas fa-car"></i></div><div style="font-size:0.8rem;margin-top:0.3rem">Automotive Parts</div></div>
+        <div style="text-align:center;padding:0.5rem"><div style="font-size:1.5rem;color:var(--cyan)"><i class="fas fa-tshirt"></i></div><div style="font-size:0.8rem;margin-top:0.3rem">Fashion &amp; Jewelry</div></div>
+        <div style="text-align:center;padding:0.5rem"><div style="font-size:1.5rem;color:var(--cyan)"><i class="fas fa-graduation-cap"></i></div><div style="font-size:0.8rem;margin-top:0.3rem">Education</div></div>
+        <div style="text-align:center;padding:0.5rem"><div style="font-size:1.5rem;color:var(--cyan)"><i class="fas fa-building"></i></div><div style="font-size:0.8rem;margin-top:0.3rem">Architecture</div></div>
+        <div style="text-align:center;padding:0.5rem"><div style="font-size:1.5rem;color:var(--cyan)"><i class="fas fa-robot"></i></div><div style="font-size:0.8rem;margin-top:0.3rem">Robotics</div></div>
+        <div style="text-align:center;padding:0.5rem"><div style="font-size:1.5rem;color:var(--cyan)"><i class="fas fa-utensils"></i></div><div style="font-size:0.8rem;margin-top:0.3rem">Food Industry</div></div>
+      </div>
+    </div>
+
+    <!-- 2. INTRO 3D SCANNING -->
+    <div class="topic-header reveal">
+      <span class="topic-num">02</span>
+      <h3>Introduction to 3D Scanning</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="card-grid grid-2 reveal" style="margin-bottom:1.25rem">
+      <div class="card card-accent-amber">
+        <div class="card-icon"><i class="fas fa-search"></i></div>
+        <h4>Definition &amp; Working Principle</h4>
+        <p>3D Scanning is the process of analyzing a real-world object to collect data on its shape and appearance, generating a digital 3D model. It uses technologies such as <strong>structured light</strong>, <strong>laser triangulation</strong>, or <strong>photogrammetry</strong> to capture precise surface geometry.</p>
+        <br>
+        <p><strong>Working Steps:</strong></p>
+        <ol style="color:var(--text2);font-size:0.88rem;padding-left:1.2rem;margin-top:0.4rem">
+          <li>Light or laser is projected onto the object surface</li>
+          <li>Reflected data is captured by sensors/cameras</li>
+          <li>Point cloud data is generated from captured frames</li>
+          <li>Point cloud is processed into a mesh model</li>
+          <li>Mesh is refined and exported as STL / OBJ</li>
+        </ol>
+      </div>
+      <div class="card card-accent-violet">
+        <div class="card-icon"><i class="fas fa-check-circle"></i></div>
+        <h4>Applications &amp; Advantages</h4>
+        <p style="margin-bottom:0.6rem"><strong>Applications:</strong></p>
+        <ul>
+          <li>Reverse engineering of existing parts</li>
+          <li>Quality inspection &amp; dimensional verification</li>
+          <li>Cultural heritage preservation</li>
+          <li>Medical imaging &amp; orthotics</li>
+          <li>Game &amp; film character modeling</li>
+        </ul>
+        <br>
+        <p style="margin-bottom:0.4rem"><strong>Advantages:</strong></p>
+        <ul>
+          <li>Non-contact, non-destructive measurement</li>
+          <li>High accuracy &amp; speed</li>
+          <li>Captures complex organic shapes</li>
+          <li>Digital archive for physical objects</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3. MANUFACTURING PROCESSES -->
+    <div class="topic-header reveal">
+      <span class="topic-num">03</span>
+      <h3>Manufacturing Processes</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="two-col reveal" style="margin-bottom:1.25rem">
+      <div class="card" style="border-color:rgba(255,171,64,0.2)">
+        <div class="card-icon" style="color:var(--amber)"><i class="fas fa-minus-circle"></i></div>
+        <h4 style="color:var(--amber)">Subtractive Manufacturing</h4>
+        <p style="margin-bottom:0.7rem">Material is removed from a solid block until the desired shape remains.</p>
+        <p><strong>Process Flow:</strong></p>
+        <p style="color:var(--text2);font-size:0.85rem;margin-top:0.3rem">Stock Material → CAD/CAM Design → Toolpath Generation → CNC Machining → Finishing</p>
+        <br>
+        <p><strong>Materials Used:</strong></p>
+        <ul style="margin-top:0.3rem"><li>Metals: Aluminum, Steel, Titanium</li><li>Wood, MDF, Foam</li><li>Acrylic, Plastics</li></ul>
+        <br>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <span class="badge badge-amber">✓ Tight tolerances</span>
+          <span class="badge badge-amber">✓ Superior surface finish</span>
+          <span class="badge badge-amber">✗ High material waste</span>
+          <span class="badge badge-amber">✗ Limited geometry</span>
+        </div>
+        <p style="margin-top:0.8rem;font-size:0.82rem;color:var(--text3)"><strong>Examples:</strong> CNC Milling, Lathe Turning, Laser Cutting, EDM</p>
+      </div>
+      <div class="card" style="border-color:rgba(0,229,255,0.2)">
+        <div class="card-icon" style="color:var(--cyan)"><i class="fas fa-plus-circle"></i></div>
+        <h4 style="color:var(--cyan)">Additive Manufacturing</h4>
+        <p style="margin-bottom:0.7rem">Material is added layer by layer according to a digital design to build a part from scratch.</p>
+        <p><strong>Process Flow:</strong></p>
+        <p style="color:var(--text2);font-size:0.85rem;margin-top:0.3rem">CAD Model → STL Export → Slicing Software → Machine Setup → Layer-by-Layer Build → Post Processing</p>
+        <br>
+        <p><strong>Materials Used:</strong></p>
+        <ul style="margin-top:0.3rem"><li>Polymers: PLA, ABS, PETG, Nylon</li><li>Metals: Stainless Steel, Titanium</li><li>Composites, Ceramics, Bio-materials</li></ul>
+        <br>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <span class="badge badge-cyan">✓ Complex geometries</span>
+          <span class="badge badge-cyan">✓ Minimal waste</span>
+          <span class="badge badge-cyan">✗ Slower speed</span>
+          <span class="badge badge-cyan">✗ Layer lines</span>
+        </div>
+        <p style="margin-top:0.8rem;font-size:0.82rem;color:var(--text3)"><strong>Examples:</strong> FDM, SLA, SLS, DMLS, PolyJet</p>
+      </div>
+    </div>
+
+    <!-- 4. FDM -->
+    <div class="topic-header reveal">
+      <span class="topic-num">04</span>
+      <h3>FDM — Fused Deposition Modeling</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="two-col reveal" style="margin-bottom:1.25rem">
+      <div>
+        <div class="highlight-box" style="margin-bottom:1.25rem">
+          <h4><i class="fas fa-info-circle" style="color:var(--cyan)"></i> What is FDM?</h4>
+          <p>FDM is the most widely used 3D printing technology. A thermoplastic filament is fed through a heated nozzle (hot end), melted, and extruded onto a build platform layer by layer. Each layer fuses to the one below as it cools, forming a solid object.</p>
+        </div>
+        <div class="highlight-box">
+          <h4><i class="fas fa-microchip" style="color:var(--cyan)"></i> Key Components</h4>
+          <ul style="color:var(--text2);font-size:0.88rem;padding-left:1.2rem">
+            <li><strong>Filament Spool</strong> — Holds the raw printing material</li>
+            <li><strong>Extruder</strong> — Grips and feeds filament to hot end</li>
+            <li><strong>Hot End</strong> — Heats and melts the filament</li>
+            <li><strong>Nozzle</strong> — Precise orifice for material deposition</li>
+            <li><strong>Build Plate</strong> — Surface where the object is formed</li>
+            <li><strong>Motion System</strong> — X/Y/Z axes for precise positioning</li>
+            <li><strong>Cooling Fan</strong> — Rapidly solidifies deposited material</li>
+          </ul>
+        </div>
+      </div>
+      <!-- FDM Diagram -->
+      <div class="fdm-diagram reveal-delay-1">
+        <h4><i class="fas fa-sitemap"></i> &nbsp; FDM Process Flow</h4>
+        <div class="fdm-step">
+          <div class="step-icon" style="color:var(--cyan)"><i class="fas fa-database"></i></div>
+          <div class="step-info"><div class="s-name">Filament Spool</div><div class="s-desc">Raw thermoplastic material</div></div>
+        </div>
+        <div class="fdm-arrow"><i class="fas fa-chevron-down"></i></div>
+        <div class="fdm-step">
+          <div class="step-icon" style="color:var(--amber)"><i class="fas fa-cog"></i></div>
+          <div class="step-info"><div class="s-name">Extruder</div><div class="s-desc">Grips &amp; feeds the filament</div></div>
+        </div>
+        <div class="fdm-arrow"><i class="fas fa-chevron-down"></i></div>
+        <div class="fdm-step">
+          <div class="step-icon" style="color:var(--amber)"><i class="fas fa-fire"></i></div>
+          <div class="step-info"><div class="s-name">Hot End</div><div class="s-desc">Heats filament to melt point</div></div>
+        </div>
+        <div class="fdm-arrow"><i class="fas fa-chevron-down"></i></div>
+        <div class="fdm-step">
+          <div class="step-icon" style="color:var(--violet)"><i class="fas fa-circle"></i></div>
+          <div class="step-info"><div class="s-name">Nozzle</div><div class="s-desc">0.4 mm extrusion orifice</div></div>
+        </div>
+        <div class="fdm-arrow"><i class="fas fa-chevron-down"></i></div>
+        <div class="fdm-step">
+          <div class="step-icon" style="color:var(--green)"><i class="fas fa-layer-group"></i></div>
+          <div class="step-info"><div class="s-name">Layer Deposition</div><div class="s-desc">Material placed on build plate</div></div>
+        </div>
+        <div class="fdm-arrow"><i class="fas fa-chevron-down"></i></div>
+        <div class="fdm-step">
+          <div class="step-icon" style="color:var(--cyan)"><i class="fas fa-cube"></i></div>
+          <div class="step-info"><div class="s-name">Finished Model</div><div class="s-desc">Final 3D printed object</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. MATERIALS -->
+    <div class="topic-header reveal">
+      <span class="topic-num">05</span>
+      <h3>FDM Materials</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="card-grid grid-3 reveal" style="margin-bottom:1.25rem">
+      <!-- PLA -->
+      <div class="material-card mat-pla">
+        <div class="mat-label">PLA</div>
+        <div class="mat-full">Polylactic Acid</div>
+        <div class="mat-row"><span class="k">Properties</span><span class="v">Biodegradable, rigid, low shrinkage, easy to print</span></div>
+        <div class="mat-row"><span class="k">Nozzle Temp</span><span class="v"><span class="temp-badge">190–230°C</span></span></div>
+        <div class="mat-row"><span class="k">Bed Temp</span><span class="v"><span class="temp-badge">45–60°C</span></span></div>
+        <div class="mat-row"><span class="k">Advantages</span><span class="v">Best for beginners; eco-friendly; sharp details; low warping</span></div>
+        <div class="mat-row"><span class="k">Applications</span><span class="v">Prototypes, figurines, household objects, educational models</span></div>
+      </div>
+      <!-- ABS -->
+      <div class="material-card mat-abs">
+        <div class="mat-label">ABS</div>
+        <div class="mat-full">Acrylonitrile Butadiene Styrene</div>
+        <div class="mat-row"><span class="k">Properties</span><span class="v">High strength, impact-resistant, heat-resistant</span></div>
+        <div class="mat-row"><span class="k">Nozzle Temp</span><span class="v"><span class="temp-badge" style="color:var(--amber)">220–260°C</span></span></div>
+        <div class="mat-row"><span class="k">Bed Temp</span><span class="v"><span class="temp-badge" style="color:var(--amber)">80–110°C</span></span></div>
+        <div class="mat-row"><span class="k">Advantages</span><span class="v">Machinable, post-processable with acetone; strong mechanical properties</span></div>
+        <div class="mat-row"><span class="k">Applications</span><span class="v">Automotive parts, enclosures, LEGO bricks, industrial components</span></div>
+      </div>
+      <!-- PETG -->
+      <div class="material-card mat-petg">
+        <div class="mat-label">PETG</div>
+        <div class="mat-full">Polyethylene Terephthalate Glycol</div>
+        <div class="mat-row"><span class="k">Properties</span><span class="v">Strong, flexible, chemical-resistant, food-safe grades available</span></div>
+        <div class="mat-row"><span class="k">Nozzle Temp</span><span class="v"><span class="temp-badge" style="color:var(--violet)">220–250°C</span></span></div>
+        <div class="mat-row"><span class="k">Bed Temp</span><span class="v"><span class="temp-badge" style="color:var(--violet)">70–85°C</span></span></div>
+        <div class="mat-row"><span class="k">Advantages</span><span class="v">Best of PLA + ABS; minimal warping; moisture resistant</span></div>
+        <div class="mat-row"><span class="k">Applications</span><span class="v">Mechanical parts, bottles, medical devices, transparent components</span></div>
+      </div>
+    </div>
+
+    <!-- 6. PRINTER USED -->
+    <div class="topic-header reveal">
+      <span class="topic-num">06</span>
+      <h3>3D Printer Used During Internship</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="two-col reveal" style="margin-bottom:1.25rem">
+      <div>
+        <!-- Image Placeholder -->
+        <div class="img-placeholder" onclick="triggerUpload(this)">
+          <input type="file" accept="image/*" onchange="showImage(this)" style="display:block;position:absolute;inset:0;opacity:0;cursor:pointer;z-index:10" />
+          <i class="fas fa-camera ph-icon"></i>
+          <div class="ph-label">Upload 3D Printer Image</div>
+          <div class="ph-sub">Click or tap to upload a photo of the FDM printer used during the internship</div>
+          <img alt="3D Printer" />
+        </div>
+        <div class="img-caption">
+          <i class="fas fa-info-circle"></i>
+          <span>The image shows a professional enclosed FDM 3D printer with Automatic Material System (AMS) capable of multi-color printing and advanced material handling. During the internship, this machine was used to understand printer calibration, slicing, material selection, and fabrication processes.</span>
+        </div>
+      </div>
+      <!-- Spec table -->
+      <div class="spec-wrap reveal-delay-1">
+        <div class="spec-header"><i class="fas fa-list-ul"></i> &nbsp; Machine Specifications</div>
+        <table class="spec-table">
+          <tr><td>Machine Size</td><td>435 × 445 × 385 mm</td></tr>
+          <tr><td>Build Volume</td><td>200 × 200 × 200 mm</td></tr>
+          <tr><td>Print Technology</td><td>FFF (Fused Filament Fabrication)</td></tr>
+          <tr><td>Filament Diameter</td><td>1.75 mm</td></tr>
+          <tr><td>Nozzle Diameter</td><td>0.4 mm</td></tr>
+          <tr><td>Nozzle Temperature</td><td>Up to 280°C</td></tr>
+          <tr><td>Bed Temperature</td><td>Up to 150°C</td></tr>
+          <tr><td>Feeder Type</td><td>Direct Drive</td></tr>
+          <tr><td>Calibration</td><td>Active Auto Leveling &amp; Calibration</td></tr>
+          <tr><td>Build Speed</td><td>Up to 40 mm³/s</td></tr>
+          <tr><td>Build Plate Surface</td><td>PEI Flexbuild Surface</td></tr>
+          <tr><td>Operating Temperature</td><td>15°C – 35°C</td></tr>
+          <tr><td>Compatible Materials</td><td>PLA, PLA+, Tough PLA, ABS, PETG, Nylon, CF-PLA, CF-Nylon, PVA, BVOH, Polycarbonate</td></tr>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /section-inner -->
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================ -->
+<!-- DAY 02 – LASER CUTTING                                        -->
+<!-- ============================================================ -->
+<section class="section s-amber" id="day2">
+  <div class="section-inner">
+
+    <div class="day-header">
+      <div class="day-number-block" style="border-color:rgba(255,171,64,0.25)">
+        <div class="day-n" style="color:var(--amber)">02</div>
+        <div class="day-name">Tuesday</div>
+      </div>
+      <div class="day-title-area">
+        <h2>Laser Cutting <span style="color:var(--amber)">Technology</span></h2>
+        <p>CO₂ laser principles, machine operations, safety protocols, and the chiller cooling system.</p>
+        <div class="day-badges">
+          <span class="badge badge-amber"><i class="fas fa-bolt"></i> CO₂ Laser</span>
+          <span class="badge badge-amber"><i class="fas fa-minus-circle"></i> Subtractive</span>
+          <span class="badge badge-cyan"><i class="fas fa-shield-alt"></i> Safety</span>
+          <span class="badge badge-green"><i class="fas fa-thermometer-half"></i> Cooling</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. INTRO LASER -->
+    <div class="topic-header reveal">
+      <span class="topic-num">01</span>
+      <h3>Introduction to Laser Cutting</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="card-grid grid-2 reveal" style="margin-bottom:1.25rem">
+      <div class="card card-accent-amber">
+        <div class="card-icon"><i class="fas fa-crosshairs"></i></div>
+        <h4>Definition</h4>
+        <p>Laser cutting is a thermal subtractive manufacturing process that uses a high-powered, focused laser beam to cut, engrave, or mark materials with extreme precision. It is controlled by CNC (Computer Numerical Control) systems that follow vector paths from digital design files.</p>
+      </div>
+      <div class="card card-accent-green">
+        <div class="card-icon"><i class="fas fa-industry"></i></div>
+        <h4>Industrial Uses &amp; Applications</h4>
+        <ul>
+          <li>Sheet metal fabrication &amp; cutting</li>
+          <li>Acrylic signage &amp; display manufacturing</li>
+          <li>Textile &amp; leather cutting</li>
+          <li>PCB prototyping</li>
+          <li>Architectural model making</li>
+          <li>Packaging &amp; die cutting</li>
+          <li>Engraving awards &amp; trophies</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2. WORKING PRINCIPLE -->
+    <div class="topic-header reveal">
+      <span class="topic-num">02</span>
+      <h3>Working Principle</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="card-grid grid-3 reveal" style="margin-bottom:1.25rem">
+      <div class="card card-accent-amber">
+        <div class="card-icon"><i class="fas fa-bolt"></i></div>
+        <h4>Step 1 — Laser Generation</h4>
+        <p>High-voltage electricity excites CO₂ gas inside a sealed glass tube, producing an intense infrared laser beam at 10.6 μm wavelength. The tube is DC-excited for consistent power output.</p>
+      </div>
+      <div class="card card-accent-amber">
+        <div class="card-icon"><i class="fas fa-search"></i></div>
+        <h4>Step 2 — Mirror Reflection</h4>
+        <p>The generated beam is directed using a series of precision-aligned gold or silicon mirrors across the machine gantry to the cutting head, maintaining beam quality and alignment.</p>
+      </div>
+      <div class="card card-accent-amber">
+        <div class="card-icon"><i class="fas fa-dot-circle"></i></div>
+        <h4>Step 3 — Lens Focusing</h4>
+        <p>A ZnSe (zinc selenide) focusing lens concentrates the beam to a tiny spot (typically 0.1–0.3 mm). The focal length determines the power density at the material surface.</p>
+      </div>
+      <div class="card card-accent-amber">
+        <div class="card-icon"><i class="fas fa-fire"></i></div>
+        <h4>Step 4 — Material Heating</h4>
+        <p>The concentrated beam rapidly heats the material surface to its vaporization or melting temperature, depending on the material type and set laser power parameters.</p>
+      </div>
+      <div class="card card-accent-amber">
+        <div class="card-icon"><i class="fas fa-cut"></i></div>
+        <h4>Step 5 — Cutting Process</h4>
+        <p>The CNC gantry moves the cutting head along the programmed vector path. Assist gas (air or nitrogen) is blown coaxially to remove molten/vaporized material from the kerf.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="color:var(--cyan)"><i class="fas fa-check-double"></i></div>
+        <h4>Advantages</h4>
+        <ul>
+          <li>High cutting precision (±0.1 mm)</li>
+          <li>Very narrow kerf (minimal material loss)</li>
+          <li>No tool wear or contact force</li>
+          <li>Fast processing speed</li>
+          <li>Smooth, clean cut edges</li>
+          <li>Automated CNC operation</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Image placeholder CO2 cutter -->
+    <div class="reveal" style="margin-bottom:1.25rem">
+      <div class="img-placeholder" onclick="triggerUpload(this)">
+        <input type="file" accept="image/*" onchange="showImage(this)" style="display:block;position:absolute;inset:0;opacity:0;cursor:pointer;z-index:10" />
+        <i class="fas fa-camera ph-icon"></i>
+        <div class="ph-label">Upload CO₂ Laser Cutter Construction Image</div>
+        <div class="ph-sub">Diagram or photo showing internal structure / beam path of the CO₂ laser cutter</div>
+        <img alt="CO2 Laser Cutter" />
+      </div>
+    </div>
+
+    <!-- 3. MACHINE SPECS -->
+    <div class="topic-header reveal">
+      <span class="topic-num">03</span>
+      <h3>Machine Specifications</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="spec-wrap reveal" style="margin-bottom:1.25rem">
+      <div class="spec-header" style="background:rgba(255,171,64,0.08)"><i class="fas fa-bolt" style="color:var(--amber)"></i> &nbsp; CO₂ Laser Cutter — Technical Specifications</div>
+      <table class="spec-table">
+        <tr><td>Engraving Speed</td><td>0 – 640,000 mm/min</td></tr>
+        <tr><td>Cutting Speed</td><td>0 – 30,000 mm/min</td></tr>
+        <tr><td>Laser Type</td><td>CO₂ DC Glass Laser Tube</td></tr>
+        <tr><td>Laser Power</td><td>80 Watt</td></tr>
+        <tr><td>Processing Area</td><td>900 × 600 mm</td></tr>
+        <tr><td>Power Supply</td><td>AC 220V ±5%</td></tr>
+        <tr><td>Supported Formats</td><td>AI, BMP, PLT, DXF, DST</td></tr>
+      </table>
+    </div>
+
+    <!-- 4. SAFETY -->
+    <div class="topic-header reveal">
+      <span class="topic-num">04</span>
+      <h3>Safety Measures</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="card-grid grid-3 reveal" style="margin-bottom:1.25rem">
+      <div class="safety-card" style="border-color:rgba(255,171,64,0.2)">
+        <div class="s-ico" style="color:var(--amber)"><i class="fas fa-eye"></i></div>
+        <h4>Eye Protection</h4>
+        <p>Always wear OD 5+ laser-rated safety goggles that match the laser wavelength (10.6 μm for CO₂). Never look directly at the beam or reflections without proper eyewear.</p>
+      </div>
+      <div class="safety-card" style="border-color:rgba(0,229,255,0.2)">
+        <div class="s-ico" style="color:var(--cyan)"><i class="fas fa-wind"></i></div>
+        <h4>Ventilation</h4>
+        <p>Operate with exhaust fans and fume extraction systems running at all times. Cutting plastics and wood produces toxic fumes, particulate matter, and VOCs.</p>
+      </div>
+      <div class="safety-card" style="border-color:rgba(255,107,107,0.2)">
+        <div class="s-ico" style="color:#ff6b6b"><i class="fas fa-fire-extinguisher"></i></div>
+        <h4>Fire Safety</h4>
+        <p>Keep a CO₂ fire extinguisher nearby. Never leave the machine unattended. Avoid cutting highly flammable materials. Ensure no debris accumulates in the cutting area.</p>
+      </div>
+      <div class="safety-card" style="border-color:rgba(105,255,151,0.2)">
+        <div class="s-ico" style="color:var(--green)"><i class="fas fa-clipboard-check"></i></div>
+        <h4>Material Inspection</h4>
+        <p>Verify material compatibility before cutting. Never cut PVC (releases chlorine gas), mirror-coated surfaces, or carbon fiber without proper precautions.</p>
+      </div>
+      <div class="safety-card" style="border-color:rgba(179,136,255,0.2)">
+        <div class="s-ico" style="color:var(--violet)"><i class="fas fa-exclamation-triangle"></i></div>
+        <h4>Emergency Procedures</h4>
+        <p>Know the location of the emergency stop button and main power switch. In case of fire or fume leak: stop machine, evacuate, and alert lab personnel immediately.</p>
+      </div>
+      <div class="safety-card" style="border-color:rgba(255,171,64,0.2)">
+        <div class="s-ico" style="color:var(--amber)"><i class="fas fa-hard-hat"></i></div>
+        <h4>General Safety</h4>
+        <p>No loose clothing near the machine. Maintain the machine regularly — clean optics, check mirror alignment, and ensure doors/interlocks function properly before each session.</p>
+      </div>
+    </div>
+
+    <!-- 5. CHILLER -->
+    <div class="topic-header reveal">
+      <span class="topic-num">05</span>
+      <h3>Chiller System</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="two-col reveal" style="margin-bottom:1.25rem">
+      <div>
+        <div class="highlight-box" style="margin-bottom:1.25rem">
+          <h4><i class="fas fa-snowflake" style="color:var(--cyan)"></i> What is a Laser Chiller?</h4>
+          <p>A laser chiller (water chiller) is a refrigeration unit that circulates cooled distilled water through the CO₂ glass laser tube to maintain its operating temperature. Without cooling, the tube overheats rapidly, reducing power output, shortening tube lifespan, and causing failure.</p>
+        </div>
+        <div class="highlight-box" style="margin-bottom:1.25rem">
+          <h4><i class="fas fa-sync-alt" style="color:var(--cyan)"></i> Cooling Process</h4>
+          <ul style="color:var(--text2);font-size:0.88rem;padding-left:1.2rem">
+            <li>Distilled water flows through the laser tube jacket</li>
+            <li>Heat absorbed from the tube enters the chiller circuit</li>
+            <li>Refrigeration compressor dissipates the heat</li>
+            <li>Cooled water is recirculated back to the tube</li>
+            <li>Flow rate and temperature are continuously monitored</li>
+          </ul>
+        </div>
+        <div class="temp-display">
+          <div class="temp-card">
+            <div class="t-val recommended">18–25°C</div>
+            <div class="t-label">Recommended Range</div>
+          </div>
+          <div class="temp-card">
+            <div class="t-val best">20–22°C</div>
+            <div class="t-label">Best Operating Temp</div>
+          </div>
+        </div>
+        <div class="note-card" style="margin-top:1rem">
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>Operating above 25°C causes reduced laser power, beam instability, and accelerated tube degradation. Operating below 18°C risks condensation forming on optics, damaging mirror coatings and lens surfaces. Maintaining 20–22°C ensures stable, consistent output and maximum tube lifespan.</p>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1.25rem">
+        <div class="img-placeholder" onclick="triggerUpload(this)">
+          <input type="file" accept="image/*" onchange="showImage(this)" style="display:block;position:absolute;inset:0;opacity:0;cursor:pointer;z-index:10" />
+          <i class="fas fa-camera ph-icon"></i>
+          <div class="ph-label">Upload Chiller System Image</div>
+          <div class="ph-sub">Photo or diagram of the water chiller unit used with the laser cutter</div>
+          <img alt="Laser Chiller" />
+        </div>
+        <div class="img-placeholder" onclick="triggerUpload(this)">
+          <input type="file" accept="image/*" onchange="showImage(this)" style="display:block;position:absolute;inset:0;opacity:0;cursor:pointer;z-index:10" />
+          <i class="fas fa-camera ph-icon"></i>
+          <div class="ph-label">Upload Acrylic Cutting Parameters Image</div>
+          <div class="ph-sub">Screenshot of software settings / parameter sheet for acrylic cutting</div>
+          <img alt="Acrylic Parameters" />
+        </div>
+        <!-- ACRYLIC TECHNICAL NOTE CARD -->
+        <div class="acrylic-note-card">
+          <div class="anc-header">
+            <div class="anc-icon-wrap"><i class="fas fa-sliders-h"></i></div>
+            <div>
+              <div class="anc-title">Acrylic Cutting Parameters</div>
+              <div class="anc-sub">80W CO₂ Laser — Recommended Settings</div>
+            </div>
+            <span class="anc-badge"><i class="fas fa-shield-alt"></i> Verified</span>
+          </div>
+          <div class="anc-body">
+            <div class="anc-param-grid">
+              <div class="anc-param">
+                <div class="anc-p-icon" style="background:rgba(0,229,255,0.12);color:var(--cyan)"><i class="fas fa-ruler-combined"></i></div>
+                <div class="anc-p-label">Thickness</div>
+                <div class="anc-p-val">3 mm</div>
+              </div>
+              <div class="anc-param">
+                <div class="anc-p-icon" style="background:rgba(255,171,64,0.12);color:var(--amber)"><i class="fas fa-tachometer-alt"></i></div>
+                <div class="anc-p-label">Speed</div>
+                <div class="anc-p-val">15–20 mm/s</div>
+              </div>
+              <div class="anc-param">
+                <div class="anc-p-icon" style="background:rgba(179,136,255,0.12);color:var(--violet)"><i class="fas fa-bolt"></i></div>
+                <div class="anc-p-label">Power</div>
+                <div class="anc-p-val">70–80%</div>
+              </div>
+              <div class="anc-param">
+                <div class="anc-p-icon" style="background:rgba(105,255,151,0.12);color:var(--green)"><i class="fas fa-redo"></i></div>
+                <div class="anc-p-label">Passes</div>
+                <div class="anc-p-val">2 passes</div>
+              </div>
+            </div>
+            <div class="anc-table-wrap">
+              <div class="anc-table-title"><i class="fas fa-table"></i> Multi-Thickness Reference Table</div>
+              <table class="anc-table">
+                <thead>
+                  <tr>
+                    <th>Thickness</th>
+                    <th>Speed (mm/s)</th>
+                    <th>Power (%)</th>
+                    <th>Passes</th>
+                    <th>Air Assist</th>
+                    <th>Note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="anc-tr-best">
+                    <td><span class="anc-pill cyan">3 mm</span></td>
+                    <td>15 – 20</td>
+                    <td>70 – 80%</td>
+                    <td>1–2</td>
+                    <td><span class="anc-dot green"></span> On</td>
+                    <td>Standard; clean polished edge</td>
+                  </tr>
+                  <tr>
+                    <td><span class="anc-pill amber">5 mm</span></td>
+                    <td>10 – 14</td>
+                    <td>85 – 90%</td>
+                    <td>2</td>
+                    <td><span class="anc-dot green"></span> On</td>
+                    <td>Reduce speed for full penetration</td>
+                  </tr>
+                  <tr>
+                    <td><span class="anc-pill violet">6 mm</span></td>
+                    <td>8 – 12</td>
+                    <td>90 – 95%</td>
+                    <td>2–3</td>
+                    <td><span class="anc-dot green"></span> On</td>
+                    <td>Multiple passes recommended</td>
+                  </tr>
+                  <tr>
+                    <td><span class="anc-pill" style="background:rgba(255,107,107,0.15);color:#ff6b6b">8 mm</span></td>
+                    <td>5 – 8</td>
+                    <td>95 – 100%</td>
+                    <td>3+</td>
+                    <td><span class="anc-dot green"></span> On</td>
+                    <td>Max power; test cut advised</td>
+                  </tr>
+                  <tr>
+                    <td colspan="6" style="padding:0.5rem 0.75rem;font-size:0.78rem;color:var(--text3);font-style:italic"><i class="fas fa-info-circle" style="color:var(--amber)"></i> &nbsp;Engraving (all): Speed 300–500 mm/min · Power 15–30% · 1 pass · DPI 300–500</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="anc-tips">
+              <div class="anc-tip"><span class="anc-tip-icon" style="color:var(--cyan)"><i class="fas fa-check-circle"></i></span><span>Always do a <strong>test cut on scrap acrylic</strong> before the main job to verify parameters.</span></div>
+              <div class="anc-tip"><span class="anc-tip-icon" style="color:var(--green)"><i class="fas fa-wind"></i></span><span><strong>Air assist</strong> prevents edge yellowing, removes molten debris, and reduces fire risk significantly.</span></div>
+              <div class="anc-tip"><span class="anc-tip-icon" style="color:var(--amber)"><i class="fas fa-layer-group"></i></span><span>Leave the <strong>protective film on</strong> during cutting — it prevents surface scratch and eliminates the need for masking tape.</span></div>
+              <div class="anc-tip"><span class="anc-tip-icon" style="color:var(--violet)"><i class="fas fa-exclamation-triangle"></i></span><span>Never cut <strong>PVC or chlorinated plastics</strong> — they emit toxic chlorine gas that damages the machine and is hazardous to health.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================ -->
+<!-- DAY 03 – VINYL CUTTING                                        -->
+<!-- ============================================================ -->
+<section class="section s-violet" id="day3">
+  <div class="section-inner">
+
+    <div class="day-header">
+      <div class="day-number-block" style="border-color:rgba(179,136,255,0.25)">
+        <div class="day-n" style="color:var(--violet)">03</div>
+        <div class="day-name">Wednesday</div>
+      </div>
+      <div class="day-title-area">
+        <h2>Vinyl Cutting <span style="color:var(--violet)">Machine</span></h2>
+        <p>Digital cutting for stickers, signage, branding, and heat transfer applications using the CX24 and CX12 cutters.</p>
+        <div class="day-badges">
+          <span class="badge badge-violet"><i class="fas fa-cut"></i> Vinyl Cutting</span>
+          <span class="badge badge-violet"><i class="fas fa-print"></i> CX24 / CX12</span>
+          <span class="badge badge-amber"><i class="fas fa-palette"></i> Stickers</span>
+          <span class="badge badge-green"><i class="fas fa-tag"></i> Signage</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. INTRO VINYL -->
+    <div class="topic-header reveal">
+      <span class="topic-num">01</span>
+      <h3>Introduction to Vinyl Cutting</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="card-grid grid-3 reveal" style="margin-bottom:1.25rem">
+      <div class="card card-accent-violet">
+        <div class="card-icon"><i class="fas fa-info-circle"></i></div>
+        <h4>Definition</h4>
+        <p>Vinyl cutting is a digital fabrication process where a computer-controlled plotter blade precisely cuts adhesive vinyl sheets according to a vector design. The CNC-controlled blade traces paths defined by software, producing clean, repeatable cuts at high speed.</p>
+      </div>
+      <div class="card card-accent-violet">
+        <div class="card-icon"><i class="fas fa-crosshairs"></i></div>
+        <h4>Purpose</h4>
+        <p>Used to create stickers, decals, labels, signage, heat transfer graphics, and vehicle wraps. Vinyl cutting bridges digital design and physical production — turning a vector file into a tangible product with minimal material waste.</p>
+      </div>
+      <div class="card card-accent-violet">
+        <div class="card-icon"><i class="fas fa-briefcase"></i></div>
+        <h4>Industry Applications</h4>
+        <ul>
+          <li>Commercial signage &amp; display</li>
+          <li>Apparel decoration (HTV)</li>
+          <li>Packaging &amp; labelling</li>
+          <li>Vehicle wraps &amp; fleet branding</li>
+          <li>Promotional merchandise</li>
+          <li>Architectural graphics &amp; window film</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2. ANIMATED WORKFLOW -->
+    <div class="topic-header reveal">
+      <span class="topic-num">02</span>
+      <h3>Working Process</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="two-col reveal" style="margin-bottom:1.25rem;align-items:start">
+      <!-- Left: animated vertical workflow -->
+      <div class="vinyl-workflow" id="vinylWorkflow">
+        <div class="vwf-row">
+          <div class="vwf-step" style="animation-delay:0.0s">
+            <div class="vwf-icon-wrap" style="background:rgba(179,136,255,0.15);color:var(--violet)"><i class="fas fa-pencil-ruler"></i></div>
+            <div class="vwf-info"><div class="vwf-name">Design Creation</div><div class="vwf-desc">Vector art in Adobe Illustrator / CorelDRAW</div></div>
+          </div>
+        </div>
+        <div class="vwf-connector"><div class="vwf-node"></div><div class="vwf-line"></div></div>
+        <div class="vwf-row">
+          <div class="vwf-step" style="animation-delay:0.1s">
+            <div class="vwf-icon-wrap" style="background:rgba(0,229,255,0.12);color:var(--cyan)"><i class="fas fa-laptop-code"></i></div>
+            <div class="vwf-info"><div class="vwf-name">Software Processing</div><div class="vwf-desc">Set blade force, speed &amp; offset in SignCut/VinylMaster</div></div>
+          </div>
+        </div>
+        <div class="vwf-connector"><div class="vwf-node"></div><div class="vwf-line"></div></div>
+        <div class="vwf-row">
+          <div class="vwf-step" style="animation-delay:0.2s">
+            <div class="vwf-icon-wrap" style="background:rgba(255,171,64,0.12);color:var(--amber)"><i class="fas fa-cog fa-spin-slow"></i></div>
+            <div class="vwf-info"><div class="vwf-name">Machine Cutting</div><div class="vwf-desc">Blade moves along vector path on vinyl sheet</div></div>
+          </div>
+        </div>
+        <div class="vwf-connector"><div class="vwf-node"></div><div class="vwf-line"></div></div>
+        <div class="vwf-row">
+          <div class="vwf-step" style="animation-delay:0.3s">
+            <div class="vwf-icon-wrap" style="background:rgba(105,255,151,0.12);color:var(--green)"><i class="fas fa-hand-scissors"></i></div>
+            <div class="vwf-info"><div class="vwf-name">Weeding</div><div class="vwf-desc">Excess (negative) vinyl removed with weeding tool</div></div>
+          </div>
+        </div>
+        <div class="vwf-connector"><div class="vwf-node"></div><div class="vwf-line"></div></div>
+        <div class="vwf-row">
+          <div class="vwf-step" style="animation-delay:0.4s">
+            <div class="vwf-icon-wrap" style="background:rgba(179,136,255,0.15);color:var(--violet)"><i class="fas fa-layer-group"></i></div>
+            <div class="vwf-info"><div class="vwf-name">Transfer Tape</div><div class="vwf-desc">Application tape lifts design for precise placement</div></div>
+          </div>
+        </div>
+        <div class="vwf-connector"><div class="vwf-node"></div><div class="vwf-line"></div></div>
+        <div class="vwf-row">
+          <div class="vwf-step" style="animation-delay:0.5s;border-color:rgba(105,255,151,0.3)">
+            <div class="vwf-icon-wrap" style="background:rgba(105,255,151,0.12);color:var(--green)"><i class="fas fa-check-circle"></i></div>
+            <div class="vwf-info"><div class="vwf-name">Final Product</div><div class="vwf-desc">Applied to target surface; tape removed cleanly</div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Right: process notes -->
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="highlight-box">
+          <h4><i class="fas fa-pencil-ruler" style="color:var(--violet)"></i> Design Phase</h4>
+          <p>Vector files (SVG, AI, DXF) are required. Raster images must be converted. Minimum cut size depends on blade tip — typically ≥ 3 mm for fine details. Always add a 3–5 mm border around the cut area.</p>
+        </div>
+        <div class="highlight-box">
+          <h4><i class="fas fa-sliders-h" style="color:var(--amber)"></i> Key Settings</h4>
+          <ul style="color:var(--text2);font-size:0.87rem;padding-left:1.2rem">
+            <li><strong>Blade Force (Pressure):</strong> Higher for thicker vinyl; test cut first</li>
+            <li><strong>Cut Speed:</strong> Slower for intricate designs; faster for simple shapes</li>
+            <li><strong>Blade Offset:</strong> Compensates for the angled blade tip radius</li>
+            <li><strong>Overcut:</strong> Ensures start/end points connect cleanly</li>
+          </ul>
+        </div>
+        <div class="highlight-box">
+          <h4><i class="fas fa-hand-scissors" style="color:var(--green)"></i> Weeding Tips</h4>
+          <p>Use a sharp weeding hook tool. Work under good lighting. For complex designs, use a lightpad. On small lettering, weed from the outside in. Warm vinyl weeds more easily — keep the room temperature above 18°C.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. APPLICATIONS -->
+    <div class="topic-header reveal">
+      <span class="topic-num">03</span>
+      <h3>Applications</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="vinyl-app-grid reveal" style="margin-bottom:1.25rem">
+      <div class="vinyl-app-card">
+        <div class="vac-icon"><i class="fas fa-sticky-note"></i></div>
+        <h4>Sticker Manufacturing</h4>
+        <p>Precision-cut adhesive vinyl stickers for branding, retail, and promotional products. Consistent quality at both low and high volumes.</p>
+        <span class="vac-tag">adhesive vinyl</span>
+      </div>
+      <div class="vinyl-app-card">
+        <div class="vac-icon"><i class="fas fa-sign"></i></div>
+        <h4>Sign Boards</h4>
+        <p>Indoor and outdoor signage, wayfinding lettering, office door graphics, and retail display — cut from weather-resistant vinyl.</p>
+        <span class="vac-tag">outdoor vinyl</span>
+      </div>
+      <div class="vinyl-app-card">
+        <div class="vac-icon"><i class="fas fa-bullhorn"></i></div>
+        <h4>Branding</h4>
+        <p>Corporate identity applications, product logo stickers, event banners, trade show graphics, and branded packaging.</p>
+        <span class="vac-tag">brand identity</span>
+      </div>
+      <div class="vinyl-app-card">
+        <div class="vac-icon"><i class="fas fa-car"></i></div>
+        <h4>Vehicle Graphics</h4>
+        <p>Full wraps, partial decals, fleet numbering, and racing liveries using premium cast vinyl rated 5–7 years outdoor.</p>
+        <span class="vac-tag">cast vinyl</span>
+      </div>
+      <div class="vinyl-app-card">
+        <div class="vac-icon"><i class="fas fa-tag"></i></div>
+        <h4>Label Making</h4>
+        <p>Product labels, barcodes, safety warning stickers, and packaging seals for small-batch and industrial production.</p>
+        <span class="vac-tag">label vinyl</span>
+      </div>
+      <div class="vinyl-app-card" style="border-color:rgba(255,171,64,0.2)">
+        <div class="vac-icon" style="background:var(--amber-dim);color:var(--amber);border-color:rgba(255,171,64,0.2)"><i class="fas fa-tshirt"></i></div>
+        <h4>Heat Transfer Vinyl</h4>
+        <p>Custom garment decoration, sportswear numbers, and personalised apparel using HTV with heat press at 150–180°C.</p>
+        <span class="vac-tag" style="background:var(--amber-dim);color:var(--amber)">HTV · heat press</span>
+      </div>
+    </div>
+
+    <!-- 4 & 5 VINYL CUTTERS — enhanced -->
+    <div class="topic-header reveal">
+      <span class="topic-num">04</span>
+      <h3>CX24 Vinyl Cutter</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="reveal" style="margin-bottom:1.5rem">
+      <div class="vinyl-spec-v2">
+        <div class="vsv2-hero" data-model="CX24" style="background:linear-gradient(135deg,rgba(179,136,255,0.07) 0%,rgba(0,229,255,0.04) 100%);border-bottom:1px solid var(--border)">
+          <div class="vsv2-model-row">
+            <div style="width:44px;height:44px;border-radius:12px;background:var(--violet-dim);border:1px solid rgba(179,136,255,0.25);display:flex;align-items:center;justify-content:center;color:var(--violet);font-size:1.2rem;flex-shrink:0"><i class="fas fa-cut"></i></div>
+            <div>
+              <div class="vsv2-model" style="color:var(--violet)">CX24</div>
+              <div class="vsv2-subtitle">Professional 24-inch Vinyl Plotter Cutter</div>
+            </div>
+            <span class="badge badge-violet" style="margin-left:auto;align-self:flex-start"><i class="fas fa-star"></i> Pro</span>
+          </div>
+          <div class="vsv2-quick">
+            <div class="vsv2-q"><div class="vq-val" style="color:var(--violet)">600 mm</div><div class="vq-lbl">Cut Width</div></div>
+            <div class="vsv2-q"><div class="vq-val" style="color:var(--cyan)">800 mm/s</div><div class="vq-lbl">Max Speed</div></div>
+            <div class="vsv2-q"><div class="vq-val" style="color:var(--amber)">30–350g</div><div class="vq-lbl">Blade Force</div></div>
+            <div class="vsv2-q"><div class="vq-val" style="color:var(--green)">0.025 mm</div><div class="vq-lbl">Precision</div></div>
+          </div>
+        </div>
+        <div class="vsv2-body">
+          <div>
+            <div class="vsv2-section-title"><i class="fas fa-list-ul"></i> Key Features</div>
+            <div class="vsv2-feat"><i class="fas fa-check-circle" style="color:var(--violet)"></i><span><strong>Optical Registration Eye (OPOS):</strong> Detects printed registration marks for accurate print-and-cut workflow</span></div>
+            <div class="vsv2-feat"><i class="fas fa-check-circle" style="color:var(--violet)"></i><span><strong>Wide-Format Capability:</strong> Up to 600 mm (24") wide media — handles banners and large-format graphics</span></div>
+            <div class="vsv2-feat"><i class="fas fa-check-circle" style="color:var(--violet)"></i><span><strong>Servo Drive Motor:</strong> Precise stepping ensures consistent cut quality at high speeds</span></div>
+            <div class="vsv2-feat"><i class="fas fa-check-circle" style="color:var(--violet)"></i><span><strong>Adjustable Blade Force:</strong> 30–350g range handles standard vinyl to thick cardstock and flex film</span></div>
+            <div class="vsv2-feat"><i class="fas fa-check-circle" style="color:var(--violet)"></i><span><strong>Dual Connectivity:</strong> USB + Serial RS-232 ports for broad software compatibility</span></div>
+          </div>
+          <div>
+            <div class="vsv2-section-title"><i class="fas fa-bolt"></i> Benefits</div>
+            <div class="vsv2-feat"><i class="fas fa-arrow-right" style="color:var(--cyan)"></i><span>High-throughput commercial production with consistent quality across long roll media</span></div>
+            <div class="vsv2-feat"><i class="fas fa-arrow-right" style="color:var(--cyan)"></i><span>OPOS eye eliminates registration errors in print-and-cut jobs, saving material and time</span></div>
+            <div class="vsv2-feat"><i class="fas fa-arrow-right" style="color:var(--cyan)"></i><span>Compatible with CorelDRAW, Adobe Illustrator, SignCut Pro, VinylMaster, FlexiSign</span></div>
+          </div>
+          <div>
+            <div class="vsv2-section-title"><i class="fas fa-tag"></i> Applications</div>
+            <div class="vsv2-app-pills">
+              <span class="vsv2-app-pill" style="background:var(--violet-dim);color:var(--violet)">Vehicle graphics</span>
+              <span class="vsv2-app-pill" style="background:var(--violet-dim);color:var(--violet)">Banners &amp; signage</span>
+              <span class="vsv2-app-pill" style="background:var(--violet-dim);color:var(--violet)">Commercial stickers</span>
+              <span class="vsv2-app-pill" style="background:var(--violet-dim);color:var(--violet)">Floor graphics</span>
+              <span class="vsv2-app-pill" style="background:var(--violet-dim);color:var(--violet)">Print &amp; cut labels</span>
+              <span class="vsv2-app-pill" style="background:var(--violet-dim);color:var(--violet)">Window decals</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image CX24 -->
+    <div class="reveal" style="margin-bottom:1.5rem">
+      <div class="img-placeholder" onclick="triggerUpload(this)" style="min-height:200px">
+        <input type="file" accept="image/*" onchange="showImage(this)" style="display:block;position:absolute;inset:0;opacity:0;cursor:pointer;z-index:10" />
+        <i class="fas fa-camera ph-icon"></i>
+        <div class="ph-label">Upload CX24 Vinyl Cutter Image</div>
+        <div class="ph-sub">Photo of the CX24 professional vinyl plotter cutter</div>
+        <img alt="CX24 Vinyl Cutter" />
+      </div>
+      <div class="img-caption"><i class="fas fa-info-circle"></i><span>CX24 — 24" Professional Vinyl Cutter with OPOS optical registration eye for print &amp; cut jobs</span></div>
+    </div>
+
+    <div class="topic-header reveal">
+      <span class="topic-num">05</span>
+      <h3>CX12 Vinyl Cutter</h3>
+      <div class="topic-line"></div>
+    </div>
+    <div class="reveal" style="margin-bottom:1.5rem">
+      <div class="vinyl-spec-v2">
+        <div class="vsv2-hero" data-model="CX12" style="background:linear-gradient(135deg,rgba(0,229,255,0.06) 0%,rgba(105,255,151,0.03) 100%);border-bottom:1px solid var(--border)">
+          <div class="vsv2-model-row">
+            <div style="width:44px;height:44px;border-radius:12px;background:var(--cyan-dim);border:1px solid rgba(0,229,255,0.25);display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:1.2rem;flex-shrink:0"><i class="fas fa-cut"></i></div>
+            <div>
+              <div class="vsv2-model" style="color:var(--cyan)">CX12</div>
+              <div class="vsv2-subtitle">Compact 12-inch Desktop Vinyl Cutter</div>
+            </div>
+            <span class="badge badge-cyan" style="margin-left:auto;align-self:flex-start"><i class="fas fa-desktop"></i> Desktop</span>
+          </div>
+          <div class="vsv2-quick">
+            <div class="vsv2-q"><div class="vq-val" style="color:var(--cyan)">305 mm</div><div class="vq-lbl">Cut Width</div></div>
+            <div class="vsv2-q"><div class="vq-val" style="color:var(--violet)">600 mm/s</div><div class="vq-lbl">Max Speed</div></div>
+            <div class="vsv2-q"><div class="vq-val" style="color:var(--amber)">20–250g</div><div class="vq-lbl">Blade Force</div></div>
+            <div class="vsv2-q"><div class="vq-val" style="color:var(--green)">Compact</div><div class="vq-lbl">Form Factor</div></div>
+          </div>
+        </div>
+        <div class="vsv2-body">
+          <div>
+            <div class="vsv2-section-title"><i class="fas fa-list-ul"></i> Key Features</div>
+            <div class="vsv2-feat"><i class="fas fa-check-circle" style="color:var(--cyan)"></i><span><strong>Compact Desktop Design:</strong> Minimal footprint; ideal for labs, studios, and classroom environments</span></div>
+            <div class="vsv2-feat"><i class="fas fa-check-circle" style="color:var(--cyan)"></i><span><strong>USB Plug-and-Play:</strong> Simple connectivity, no drivers needed for basic operation</span></div>
+            <div class="vsv2-feat"><i class="fas fa-check-circle" style="color:var(--cyan)"></i><span><strong>Precise Blade Control:</strong> 20–250g force range handles delicate paper to standard vinyl with accuracy</span></div>
+            <div class="vsv2-feat"><i class="fas fa-check-circle" style="color:var(--cyan)"></i><span><strong>Lightweight &amp; Portable:</strong> Easy to transport for events, workshops, and field use</span></div>
+            <div class="vsv2-feat"><i class="fas fa-check-circle" style="color:var(--cyan)"></i><span><strong>Media Versatility:</strong> Cuts vinyl, heat transfer film, paper, thin cardstock, and sticker sheets</span></div>
+          </div>
+          <div>
+            <div class="vsv2-section-title"><i class="fas fa-bolt"></i> Benefits</div>
+            <div class="vsv2-feat"><i class="fas fa-arrow-right" style="color:var(--violet)"></i><span>Perfect for learning environments — easy setup allows focus on design and workflow rather than machine complexity</span></div>
+            <div class="vsv2-feat"><i class="fas fa-arrow-right" style="color:var(--violet)"></i><span>Cost-effective entry point for small businesses, freelancers, and prototyping</span></div>
+            <div class="vsv2-feat"><i class="fas fa-arrow-right" style="color:var(--violet)"></i><span>Compatible with all major vector software via standard HPGL/2 command set</span></div>
+          </div>
+          <div>
+            <div class="vsv2-section-title"><i class="fas fa-tag"></i> Applications</div>
+            <div class="vsv2-app-pills">
+              <span class="vsv2-app-pill" style="background:var(--cyan-dim);color:var(--cyan)">Small stickers</span>
+              <span class="vsv2-app-pill" style="background:var(--cyan-dim);color:var(--cyan)">HTV apparel</span>
+              <span class="vsv2-app-pill" style="background:var(--cyan-dim);color:var(--cyan)">Product labels</span>
+              <span class="vsv2-app-pill" style="background:var(--cyan-dim);color:var(--cyan)">Prototyping</span>
+              <span class="vsv2-app-pill" style="background:var(--cyan-dim);color:var(--cyan)">Card crafts</span>
+              <span class="vsv2-app-pill" style="background:var(--cyan-dim);color:var(--cyan)">Name badges</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image CX12 + Vinyl Process -->
+    <div class="card-grid grid-2 reveal" style="margin-bottom:1.25rem">
+      <div>
+        <div class="img-placeholder" onclick="triggerUpload(this)" style="min-height:180px">
+          <input type="file" accept="image/*" onchange="showImage(this)" style="display:block;position:absolute;inset:0;opacity:0;cursor:pointer;z-index:10" />
+          <i class="fas fa-camera ph-icon"></i>
+          <div class="ph-label">Upload CX12 Image</div>
+          <div class="ph-sub">Photo of the CX12 compact desktop vinyl cutter</div>
+          <img alt="CX12 Vinyl Cutter" />
+        </div>
+        <div class="img-caption"><i class="fas fa-info-circle"></i><span>CX12 — Compact 12" desktop vinyl cutter for small-format production and learning</span></div>
+      </div>
+      <div>
+        <div class="img-placeholder" onclick="triggerUpload(this)" style="min-height:180px">
+          <input type="file" accept="image/*" onchange="showImage(this)" style="display:block;position:absolute;inset:0;opacity:0;cursor:pointer;z-index:10" />
+          <i class="fas fa-camera ph-icon"></i>
+          <div class="ph-label">Upload Vinyl Cutting Process</div>
+          <div class="ph-sub">Photo showing weeding, transfer tape, or finished vinyl product</div>
+          <img alt="Vinyl Cutting Process" />
+        </div>
+        <div class="img-caption"><i class="fas fa-info-circle"></i><span>Vinyl cutting process — weeding excess material and applying transfer tape before final application</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ============================================================ -->
+<!-- LEARNING OUTCOMES                                             -->
+<!-- ============================================================ -->
+<section class="outcomes-section" id="outcomes">
+  <div class="outcomes-bg"></div>
+  <div class="outcomes-inner">
+    <div class="oc-label reveal"><i class="fas fa-graduation-cap"></i> &nbsp; Final Reflection</div>
+    <h2 class="reveal">Learning <span style="color:var(--cyan)">Outcomes</span></h2>
+
+    <div class="oc-quote reveal">
+      During Week 2 of my internship at <strong>Tinkerers Lab</strong>, I gained hands-on experience with Digital Fabrication Technologies including 3D Printing, Laser Cutting, and Vinyl Cutting. I learned additive and subtractive manufacturing processes, machine operations, material properties, safety procedures, and industrial applications. This week enhanced my practical understanding of rapid prototyping and modern manufacturing technologies.
+    </div>
+
+    <div class="outcomes-grid reveal">
+      <div class="oc-pill"><i class="fas fa-cube"></i><span>FDM 3D Printing</span></div>
+      <div class="oc-pill"><i class="fas fa-layer-group"></i><span>Additive Mfg.</span></div>
+      <div class="oc-pill"><i class="fas fa-minus-circle"></i><span>Subtractive Mfg.</span></div>
+      <div class="oc-pill"><i class="fas fa-bolt"></i><span>Laser Cutting</span></div>
+      <div class="oc-pill"><i class="fas fa-cut"></i><span>Vinyl Cutting</span></div>
+      <div class="oc-pill"><i class="fas fa-flask"></i><span>Materials Science</span></div>
+      <div class="oc-pill"><i class="fas fa-shield-alt"></i><span>Safety Protocols</span></div>
+      <div class="oc-pill"><i class="fas fa-cogs"></i><span>Machine Operation</span></div>
+    </div>
+
+    <!-- PROGRESS BARS -->
+    <div class="progress-section reveal" style="margin-top:2.5rem">
+      <h3 style="font-family:var(--display);font-size:1.1rem;font-weight:700;margin-bottom:1.25rem;color:var(--text2)">Skill Progress Indicators</h3>
+      <div class="progress-item">
+        <div class="progress-header"><span class="p-label"><i class="fas fa-cube" style="color:var(--cyan);margin-right:0.4rem"></i>3D Printing — FDM Operation</span><span class="p-val">85%</span></div>
+        <div class="progress-bar"><div class="progress-fill pf-cyan" data-width="0.85"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="p-label"><i class="fas fa-flask" style="color:var(--green);margin-right:0.4rem"></i>Material Properties (PLA/ABS/PETG)</span><span class="p-val">90%</span></div>
+        <div class="progress-bar"><div class="progress-fill pf-green" data-width="0.9"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="p-label"><i class="fas fa-bolt" style="color:var(--amber);margin-right:0.4rem"></i>Laser Cutting — Machine Setup</span><span class="p-val">80%</span></div>
+        <div class="progress-bar"><div class="progress-fill pf-amber" data-width="0.8"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="p-label"><i class="fas fa-cut" style="color:var(--violet);margin-right:0.4rem"></i>Vinyl Cutting — Design to Output</span><span class="p-val">75%</span></div>
+        <div class="progress-bar"><div class="progress-fill pf-violet" data-width="0.75"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-header"><span class="p-label"><i class="fas fa-shield-alt" style="color:var(--cyan);margin-right:0.4rem"></i>Lab Safety Procedures</span><span class="p-val">95%</span></div>
+        <div class="progress-bar"><div class="progress-fill pf-cyan" data-width="0.95"></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <span>Internship Documentation — Week 02</span> &nbsp;·&nbsp; Tinkerers Lab &nbsp;·&nbsp;
+  Digital Fabrication Technologies &nbsp;·&nbsp;
+  <span>3D Printing · Laser Cutting · Vinyl Cutting</span>
+  <div style="margin-top:0.5rem;color:var(--text3);font-size:0.75rem">Built with ♥ for internship documentation purposes</div>
+</footer>
+
+<!-- ============ JAVASCRIPT ============ -->
+<script>
+/* ---- Nav toggle ---- */
+function toggleNav() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+/* ---- Reveal on scroll ---- */
+const reveals = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => revealObserver.observe(el));
+
+/* ---- Progress bar animation ---- */
+const progressFills = document.querySelectorAll('.progress-fill');
+const progressObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const w = parseFloat(e.target.dataset.width);
+      e.target.style.transform = `scaleX(${w})`;
+      e.target.classList.add('animated');
+    }
+  });
+}, { threshold: 0.3 });
+progressFills.forEach(el => progressObserver.observe(el));
+
+/* ---- Image upload ---- */
+function showImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const placeholder = input.closest('.img-placeholder');
+    const img = placeholder.querySelector('img');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    placeholder.querySelectorAll('.ph-icon, .ph-label, .ph-sub').forEach(el => el.style.display = 'none');
+    placeholder.style.minHeight = 'auto';
+    placeholder.style.border = '1px solid var(--border2)';
+    placeholder.style.background = 'var(--glass)';
+  };
+  reader.readAsDataURL(file);
+}
+
+function triggerUpload(el) {
+  el.querySelector('input[type=file]').click();
+}
+
+/* ---- Stagger card animations ---- */
+document.querySelectorAll('.card-grid').forEach(grid => {
+  grid.querySelectorAll('.card, .material-card, .safety-card, .oc-pill, .vinyl-spec').forEach((card, i) => {
+    card.style.animationDelay = `${i * 0.07}s`;
+  });
+});
+
+/* ---- Active nav highlight ---- */
+const sections = document.querySelectorAll('section[id], div[id]');
+const navAs = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id');
+  });
+  navAs.forEach(a => {
+    a.style.color = '';
+    a.style.background = '';
+    if (a.getAttribute('href') === '#' + current) {
+      a.style.color = 'var(--cyan)';
+      a.style.background = 'var(--cyan-dim)';
+    }
+  });
+}, { passive: true });
+</script>
+</body>
+</html>
